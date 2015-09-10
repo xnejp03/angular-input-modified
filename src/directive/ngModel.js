@@ -107,8 +107,10 @@
          */
         function initializeMasterValue () {
 
+          var currentValue = modelCtrl.$modelValue == null && modelCtrl.$$rawModelValue ? modelCtrl.$$rawModelValue : modelCtrl.$modelValue;
+          
           // Initializing the master value.
-          modelCtrl.masterValue = modelCtrl.$modelValue;
+          modelCtrl.masterValue = currentValue;
 
           // Initially decorating the element.
           updateCssClasses();
