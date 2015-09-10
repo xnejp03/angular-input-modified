@@ -304,11 +304,12 @@
          */
         function onInputValueChanged () {
 
+          var currentValue = modelCtrl.$modelValue;
           if (!masterValueIsSet) {
-            initializeMasterValue();
+            currentValue = initializeMasterValue();
           }
 
-          var modified = !compare(modelCtrl.$modelValue, modelCtrl.masterValue);
+          var modified = !compare(currentValue, modelCtrl.masterValue);
 
           // If modified flag has changed.
           if (modelCtrl.modified !== modified) {
@@ -329,7 +330,7 @@
         /**
          * Initializes master value if required.
          */
-        function initializeMasterValue () {
+         function initializeMasterValue () {
 
           var currentValue = modelCtrl.$modelValue == null && modelCtrl.$$rawModelValue ? modelCtrl.$$rawModelValue : modelCtrl.$modelValue;
           
@@ -340,6 +341,8 @@
           updateCssClasses();
 
           masterValueIsSet = true;
+
+          return currentValue;
         }
 
         /**
