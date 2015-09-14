@@ -119,14 +119,14 @@
         formCtrl.modifiedCount = 0;
         formCtrl.modifiedModels = [];
         formCtrl.$$notifyModelModifiedStateChanged = function (modelCtrl) {
-          onModifiedStateChanged(modelCtrl, formCtrl.modifiedModels);
+          onModifiedStateChanged(modelCtrl, formCtrl.modifiedModels, $scope);
         };
 
         // Modified child forms.
         formCtrl.modifiedChildFormsCount = 0;
         formCtrl.modifiedChildForms = [];
         formCtrl.$$notifyChildFormModifiedStateChanged = function (childFormCtrl) {
-          onModifiedStateChanged(childFormCtrl, formCtrl.modifiedChildForms);
+          onModifiedStateChanged(childFormCtrl, formCtrl.modifiedChildForms, $scope);
         };
 
 
@@ -155,7 +155,7 @@
          * @param ctrl  The modified model or modified form controller
          * @param list  The tracking list of modified controllers (models or forms)
          */
-        function onModifiedStateChanged (ctrl, list) {
+        function onModifiedStateChanged (ctrl, list, $scope) {
 
           var listIndex = list.indexOf(ctrl);
           var presentInList = (-1 !== listIndex);
@@ -179,7 +179,7 @@
 
           if (updateRequired) {
 
-            updateModifiedState();
+            updateModifiedState($scope);
 
             // Notifying the parent form if it presents.
             if (parentFormCtrl && 'function' === typeof parentFormCtrl.$$notifyChildFormModifiedStateChanged) {
@@ -198,7 +198,7 @@
          * Form is considered modified when it has at least one
          * modified element or child form.
          */
-        function updateModifiedState () {
+        function updateModifiedState ($scope) {
 
           formCtrl.modifiedCount = formCtrl.modifiedModels.length;
           formCtrl.modifiedChildFormsCount = formCtrl.modifiedChildForms.length;
@@ -206,6 +206,8 @@
           formCtrl.modified =
             (formCtrl.modifiedCount + formCtrl.modifiedChildFormsCount) > 0
           ;
+
+          $scope.$broadcast("formStateModified", formCtrl.modified);
         }
 
         /**
