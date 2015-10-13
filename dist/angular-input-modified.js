@@ -144,6 +144,10 @@
           angular.forEach(formCtrl.modifiedChildForms, function (childFormCtrl) {
             childFormCtrl.reset();
           });
+
+          formCtrl.modified = false;          
+          $scope.$broadcast("formStateReset");
+
         }
 
         /**
